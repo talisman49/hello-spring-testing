@@ -39,6 +39,21 @@ pipeline {
                 sh 'docker-compose build'
             }
         }
+        stage('Security') {
+            steps {
+                echo 'Security analysis...'
+                sh 'trivy image --format=json --output=trivy-image.json hello-spring-testing:latest'
+            }
+            post {
+                always {
+                    recordIssues(
+                        enabledForFailure: true,
+                        aggregatingResults: true,
+                        tool: trivy(pattern: 'trivy-*.json')
+                    )
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
