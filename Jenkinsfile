@@ -42,7 +42,7 @@ pipeline {
         stage('Security') {
             steps {
                 echo 'Security analysis...'
-                sh 'trivy image --format=json --output=trivy-image.json hello-spring-testing:latest'
+                sh 'trivy image --format=json --output=trivy-image.json hello-gradle:latest'
             }
             post {
                 always {
