@@ -31,7 +31,7 @@ class HelloSpringApplication {
            @RequestParam(name="a") Float a,
            @RequestParam(name = "b") Float b
     ) {
-        return a + b;
+        return a + b - 1;
     }
 
 }
