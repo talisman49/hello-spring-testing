@@ -16,17 +16,9 @@ pipeline {
                 }
             }
         }
-        
-        /*stage('Sonarqube Analisis') {
-            steps{
-                withSonarQubeEnv('local'){
-                    sh "./gradle/sonarqube"
-                }
-            }        
-        }*/
 
         stage('SonarQube Analysis') {
-            steps{
+            steps {
                 withSonarQubeEnv('sonarqube') {
                     sh "./gradlew sonarqube"
                 }        
