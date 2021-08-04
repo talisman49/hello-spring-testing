@@ -19,8 +19,8 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh "./gradlew sonarqube"
+                withSonarQubeEnv ('sonarqube') {
+                    sh './gradlew sonarqube'
                 }        
             }
         }
