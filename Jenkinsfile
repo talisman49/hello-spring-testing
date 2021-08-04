@@ -16,6 +16,15 @@ pipeline {
                 }
             }
         }
+        
+        stage('Sonarqube Analisis') {
+            steps{
+                withSonarQubeEnv('local'){
+                    sh "./gradle/sonarqube"
+                }
+            }        
+        }
+
         stage('QA') {
             steps {
                 withGradle {
