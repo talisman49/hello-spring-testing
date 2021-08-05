@@ -18,32 +18,39 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            when { expression { false } } 
-            steps {
-                withSonarQubeEnv ('sonarqube') {
-                    sh './gradlew sonarqube'
-                }        
+        stage('Analisys'){
+            parallel{
+
+                stage('SonarQube Analysis') {
+                    when { expression { false } } 
+                    steps {
+                        withSonarQubeEnv ('sonarqube') {
+                            sh './gradlew sonarqube'
+                        }        
+                    }
+                }
+
+                stage('QA') {
+                    steps {
+                        withGradle {
+                            sh './gradlew check'
+                        }
+                    }
+                    post {
+                        always {
+                            recordIssues(
+                                tools: [
+                                    pmdParser(pattern: 'build/reports/pmd/*.xml'),
+                                    spotBugs(pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true)
+                                ]
+                            )
+                        }
+                    }
+                }
             }
         }
 
-        stage('QA') {
-            steps {
-                withGradle {
-                    sh './gradlew check'
-                }
-            }
-            post {
-                always {
-                    recordIssues(
-                        tools: [
-                            pmdParser(pattern: 'build/reports/pmd/*.xml'),
-                            spotBugs(pattern: 'build/reports/spotbugs/*.xml', useRankAsPriority: true)
-                        ]
-                    )
-                }
-            }
-        }
+        
         stage('Build') {
             steps {
                 echo 'Building...'
