@@ -77,5 +77,13 @@ pipeline {
                 echo 'Deploying...'
             }
         }
+        stage('Publish'){
+            steps{
+                tag 'docker tag hello-spring-testing:latest 10.250.4.3:5050/esteban/hello-spring/hello-spring-testing:MAIN-1'
+                withDockerRegistry([url:'10.250.4.3', credentialsld: 'dockerCli']){
+                tag 'docker push --all-tags 10.250.4.3:5050/esteban/hello-spring-testing'
+                }
+            }
+        }
     }
 }
