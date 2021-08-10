@@ -85,7 +85,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-            }
+                sshagent (credentials: ['app-key']) {
+    			sh "ssh app@10.250.4.3 'cd hello-spring && docker-compose pull && docker-compose up -d'"
+		}
+           }
         }
     }
 }
